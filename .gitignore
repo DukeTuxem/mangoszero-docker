@@ -1,0 +1,11 @@
+db/data/*
+
+realmd/*
+
+world/*
+world/bin/*
+world/data/*
+world/etc/*
+world/logs/*
+world/src/*
+world/tools/*

@@ -1,0 +1,64 @@
+version: '3.7'
+
+# Note: "expose" makes the port available to
+# other containers but not outside of docker
+
+# Note2: container_names must match with hostnames
+# in config files
+
+# Note3: The first server to be reached by the WoW client is realmd,
+# which then that tells the client where to reach the world server.
+
+services:
+    db:
+        build: ./db
+        # Network name to match with config files in etc
+        container_name: db
+        image: mangoszero:db
+        ports:
+        # host:container
+        - "3306:3306"
+        environment:
+            - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD:-password}
+        networks:
+            mangos:
+                aliases:
+                   - mangos
+        volumes:
+            # If database is empty -> populate it with script
+            - ./db:/mangos-zero
+            # Else use existing data.
+            - ./db/data:/var/lib/mysql
+
+    world:
+        build: ./world
+        container_name: world
+        image: mangoszero:world
+        stdin_open: true
+        tty: true
+        depends_on:
+            - db
+        ports:
+            - "8085:8085"
+        networks:
+            mangos:
+                aliases:
+                   - mangos
+        volumes:
+            - ./world:/mangos-zero/world
+
+    realmd:
+        build: ./realmd
+        container_name: realmd
+        image: mangoszero:realmd
+        depends_on:
+            - world
+        networks:
+            - mangos
+        ports:
+            - 3724:3724 
+        volumes:
+            - ./realmd:/mangos-zero/realmd
+
+networks:
+    mangos:
