@@ -16,7 +16,7 @@ Finally all your files are at the same place and any pre-existing config can be 
 
 Start cloning the repository using this command, then change dir:
 ```sh
-$> git clone https://github.com/DukeTuxem/mangos-docker --recursive --shallow-submodules
+$> git clone https://github.com/DukeTuxem/mangoszero-docker --recursive --shallow-submodules
 
 $> cd mangos-docker
 ```
